@@ -6,7 +6,7 @@
     <title>Result</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Poppins', sans-serif;
             margin: 0;
             padding: 0;
             display: flex;
@@ -14,47 +14,79 @@
             align-items: center;
             justify-content: center;
             min-height: 100vh;
-            background-color: #f4f4f4;
+            background: linear-gradient(135deg, #ff9a9e, #fad0c4, #fbc2eb);
         }
 
         .result-container {
             text-align: center;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2);
             background: white;
+            max-width: 600px;
+            width: 90%;
         }
 
         h1 {
             color: #333;
+            font-size: 28px;
+            margin-bottom: 15px;
         }
 
         .message {
-            font-size: 18px;
+            font-size: 20px;
             color: #555;
             margin-top: 10px;
         }
 
+        .advice {
+            font-size: 18px;
+            color: #444;
+            line-height: 1.6;
+            margin-top: 20px;
+            text-align: justify;
+        }
+
         a {
             text-decoration: none;
-            color: #007BFF;
+            color: #ffffff;
+            background-color: #007BFF;
+            padding: 10px 20px;
+            border-radius: 5px;
             margin-top: 15px;
             display: inline-block;
+            font-weight: bold;
+            transition: background 0.3s ease;
         }
 
         a:hover {
-            text-decoration: underline;
+            background-color: #0056b3;
         }
     </style>
 </head>
 <body>
     <div class="result-container">
         <h1>Your Result</h1>
-        {% if score >= 60 %}
-            <p class="message">The model predicts you have depression. This indicates possible signs of Bipolar depression. Please consider reaching out to a mental health professional for support.</p>
+        <p class="message">Depression Type: {{ depression_type }}</p>
+
+        {% if depression_type == "Major Depression" %}
+        <p class="advice">
+            Major depression is serious, but it can be managed effectively. Regular physical exercise, healthy eating habits, and maintaining a regular sleep schedule can help. Try practicing mindfulness or meditation to reduce stress. Don't hesitate to reach out to a mental health professional or trusted loved ones. Building a support system is key to recovery.
+        </p>
+        {% elif depression_type == "Bipolar Depression" %}
+        <p class="advice">
+            Bipolar depression can be challenging, but you can live a balanced life with proper care. Avoid triggers like lack of sleep or high-stress situations. Work closely with a mental health professional to develop a treatment plan. Staying consistent with medications and therapy is crucial. Building a structured routine and engaging in creative outlets can also help manage mood swings.
+        </p>
+        {% elif depression_type == "Sad Depression" %}
+        <p class="advice">
+            Sad depression, often linked to seasonal changes or temporary stress, can be improved by getting exposure to natural light and staying active. Engage in social activities, even if it feels hard. Journaling or talking about your feelings with someone you trust can also provide relief. Consider setting small, achievable goals to boost your confidence and sense of purpose.
+        </p>
         {% else %}
-            <p class="message">The model indicate no signs of depression. Stay positive and take care of your mental health!</p>
+        <p class="advice">
+            No signs of depression detected. Keep maintaining a positive mindset by prioritizing self-care. Continue engaging in activities that bring you joy and fulfillment. Remember to stay connected with friends and family, practice gratitude, and seek new experiences that promote growth and happiness. Preventive care can keep mental health strong and resilient.
+        </p>
         {% endif %}
+        
         <a href="{{ url_for('index') }}">Go Back to Questionnaire</a>
     </div>
 </body>

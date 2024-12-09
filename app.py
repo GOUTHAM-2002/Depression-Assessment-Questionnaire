@@ -103,14 +103,35 @@ def index():
 
     return render_template("index.html")
 
-@app.route("/result/<int:score>")
-def result(score):
-    if score >= 60:
-        message = "The result indicates depression. Please seek professional help."
-    else:
-        message = "The result does not indicate depression."
+@app.route("/result/<int:response_id>")
+def result(response_id):
+    # Fetch the response from the database
+    response = QuestionnaireResponse.query.get_or_404(response_id)
 
-    return render_template("result.html", score=score, message=message)
+    # Calculate the total scores for each group
+    q1_to_q10_sum = sum([response.Q1, response.Q2, response.Q3, response.Q4, response.Q5,
+                         response.Q6, response.Q7, response.Q8, response.Q9, response.Q10])
+
+    q11_to_q20_sum = sum([response.Q11, response.Q12, response.Q13, response.Q14, response.Q15,
+                          response.Q16, response.Q17, response.Q18, response.Q19, response.Q20])
+
+    q21_to_q30_sum = sum([response.Q21, response.Q22, response.Q23, response.Q24, response.Q25,
+                          response.Q26, response.Q27, response.Q28, response.Q29, response.Q30])
+
+    # Determine the type of depression
+    depression_type = None
+    if q1_to_q10_sum > 20:
+        depression_type = "Major Depression"
+    elif q11_to_q20_sum > 20:
+        depression_type = "Bipolar Depression"
+    elif q21_to_q30_sum > 20:
+        depression_type = "Sad Depression"
+    else:
+        depression_type = "No significant signs of depression"
+
+    return render_template("result.html", total_score=q1_to_q10_sum + q11_to_q20_sum + q21_to_q30_sum,
+                           depression_type=depression_type)
+
 
 if __name__ == "__main__":
     app.run(debug=True)
