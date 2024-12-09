@@ -56,42 +56,61 @@ def index():
     if request.method == "POST":
         # Extract data from the form and save to the database
         response = QuestionnaireResponse(
-            Q1=request.form.get('Q1'),
-            Q2=request.form.get('Q2'),
-            Q3=request.form.get('Q3'),
-            Q4=request.form.get('Q4'),
-            Q5=request.form.get('Q5'),
-            Q6=request.form.get('Q6'),
-            Q7=request.form.get('Q7'),
-            Q8=request.form.get('Q8'),
-            Q9=request.form.get('Q9'),
-            Q10=request.form.get('Q10'),
-            Q11=request.form.get('Q11'),
-            Q12=request.form.get('Q12'),
-            Q13=request.form.get('Q13'),
-            Q14=request.form.get('Q14'),
-            Q15=request.form.get('Q15'),
-            Q16=request.form.get('Q16'),
-            Q17=request.form.get('Q17'),
-            Q18=request.form.get('Q18'),
-            Q19=request.form.get('Q19'),
-            Q20=request.form.get('Q20'),
-            Q21=request.form.get('Q21'),
-            Q22=request.form.get('Q22'),
-            Q23=request.form.get('Q23'),
-            Q24=request.form.get('Q24'),
-            Q25=request.form.get('Q25'),
-            Q26=request.form.get('Q26'),
-            Q27=request.form.get('Q27'),
-            Q28=request.form.get('Q28'),
-            Q29=request.form.get('Q29'),
-            Q30=request.form.get('Q30')
+            Q1=int(request.form.get('Q1', 0)),
+            Q2=int(request.form.get('Q2', 0)),
+            Q3=int(request.form.get('Q3', 0)),
+            Q4=int(request.form.get('Q4', 0)),
+            Q5=int(request.form.get('Q5', 0)),
+            Q6=int(request.form.get('Q6', 0)),
+            Q7=int(request.form.get('Q7', 0)),
+            Q8=int(request.form.get('Q8', 0)),
+            Q9=int(request.form.get('Q9', 0)),
+            Q10=int(request.form.get('Q10', 0)),
+            Q11=int(request.form.get('Q11', 0)),
+            Q12=int(request.form.get('Q12', 0)),
+            Q13=int(request.form.get('Q13', 0)),
+            Q14=int(request.form.get('Q14', 0)),
+            Q15=int(request.form.get('Q15', 0)),
+            Q16=int(request.form.get('Q16', 0)),
+            Q17=int(request.form.get('Q17', 0)),
+            Q18=int(request.form.get('Q18', 0)),
+            Q19=int(request.form.get('Q19', 0)),
+            Q20=int(request.form.get('Q20', 0)),
+            Q21=int(request.form.get('Q21', 0)),
+            Q22=int(request.form.get('Q22', 0)),
+            Q23=int(request.form.get('Q23', 0)),
+            Q24=int(request.form.get('Q24', 0)),
+            Q25=int(request.form.get('Q25', 0)),
+            Q26=int(request.form.get('Q26', 0)),
+            Q27=int(request.form.get('Q27', 0)),
+            Q28=int(request.form.get('Q28', 0)),
+            Q29=int(request.form.get('Q29', 0)),
+            Q30=int(request.form.get('Q30', 0))
         )
         db.session.add(response)
         db.session.commit()
-        return redirect(url_for('index'))
+
+        # Calculate the total score
+        total_score = sum([
+            response.Q1, response.Q2, response.Q3, response.Q4, response.Q5,
+            response.Q6, response.Q7, response.Q8, response.Q9, response.Q10,
+            response.Q11, response.Q12, response.Q13, response.Q14, response.Q15,
+            response.Q16, response.Q17, response.Q18, response.Q19, response.Q20,
+            response.Q21, response.Q22, response.Q23, response.Q24, response.Q25,
+            response.Q26, response.Q27, response.Q28, response.Q29, response.Q30
+        ])
+        return redirect(url_for('result', score=total_score))
 
     return render_template("index.html")
+
+@app.route("/result/<int:score>")
+def result(score):
+    if score >= 60:
+        message = "The result indicates depression. Please seek professional help."
+    else:
+        message = "The result does not indicate depression."
+
+    return render_template("result.html", score=score, message=message)
 
 if __name__ == "__main__":
     app.run(debug=True)
