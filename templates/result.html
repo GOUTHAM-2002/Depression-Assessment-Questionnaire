@@ -6,66 +6,91 @@
     <title>Mohammed AI - Chatbot</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Poppins', Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f0f4f8;
+            background: linear-gradient(to bottom right, #6a11cb, #2575fc);
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
+            color: #333;
         }
 
         #chat-container {
             width: 100%;
             max-width: 650px;
             background: #ffffff;
-            border-radius: 12px;
-            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+            border-radius: 15px;
+            box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
             display: flex;
             flex-direction: column;
             overflow: hidden;
+            position: relative;
         }
 
         #header {
-            background-color: #3333cc;
-            color: #ffffff;
+            background: linear-gradient(to right, #6a11cb, #2575fc);
+            color: #fff;
             text-align: center;
-            padding: 15px;
-            font-size: 1.2rem;
+            padding: 20px;
+            font-size: 1.5rem;
             font-weight: bold;
+            text-transform: uppercase;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
         }
 
         #messages {
             flex: 1;
             padding: 20px;
             overflow-y: auto;
-            background-color: #f9f9fc;
+            background-color: #f8f9fc;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            scrollbar-width: thin;
+            scrollbar-color: #6a11cb #f8f9fc;
+        }
+
+        #messages::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        #messages::-webkit-scrollbar-thumb {
+            background: #6a11cb;
+            border-radius: 8px;
         }
 
         .message {
-            margin: 10px 0;
-            padding: 10px;
-            border-radius: 8px;
-            max-width: 80%;
+            padding: 15px;
+            border-radius: 12px;
+            font-size: 1rem;
+            line-height: 1.4;
+            max-width: 75%;
+            word-wrap: break-word;
         }
 
         .user {
             align-self: flex-end;
-            background-color: #d1e7ff;
-            color: #003366;
+            background: #6a11cb;
+            color: #fff;
+            animation: fadeIn 0.5s;
         }
 
         .bot {
             align-self: flex-start;
-            background-color: #e9ecef;
-            color: #333333;
+            background: #e0e7ff;
+            color: #333;
+            animation: fadeIn 0.5s;
         }
 
         #input-container {
             display: flex;
             border-top: 1px solid #ccc;
             background: #ffffff;
+            position: sticky;
+            bottom: 0;
+            z-index: 10;
         }
 
         input[type="text"] {
@@ -74,25 +99,73 @@
             border: none;
             font-size: 1rem;
             outline: none;
+            background: #f0f4ff;
+            border-radius: 0 0 0 15px;
         }
 
         button {
             padding: 15px;
-            background: #3333cc;
+            background: #6a11cb;
             color: #ffffff;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            transition: background 0.3s;
+            font-size: 1.2rem;
+            border-radius: 0 0 15px 0;
+            transition: background 0.3s ease;
         }
 
         button:hover {
-            background: #2222aa;
+            background: #4c0ba9;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        a {
+            text-decoration: none;
+            color: #2575fc;
+            font-weight: bold;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .result-container {
+            text-align: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+        }
+
+        .advice {
+            margin-top: 10px;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 1.8rem;
+            color: #6a11cb;
+        }
+
+        p {
+            margin: 10px 0;
         }
     </style>
 </head>
 <body>
-
     <div class="result-container">
         <h1>Your Result</h1>
         <p class="message">Depression Type: {{ depression_type }}</p>
@@ -114,9 +187,10 @@
             No signs of depression detected. Keep maintaining a positive mindset by prioritizing self-care. Continue engaging in activities that bring you joy and fulfillment. Remember to stay connected with friends and family, practice gratitude, and seek new experiences that promote growth and happiness. Preventive care can keep mental health strong and resilient.
         </p>
         {% endif %}
-        
+
         <a href="{{ url_for('index') }}">Go Back to Questionnaire</a>
     </div>
+
     {% if depression_type != "No significant signs of depression" %}
     <div id="chat-container">
         <div id="header">Depression AI - Chatbot</div>
