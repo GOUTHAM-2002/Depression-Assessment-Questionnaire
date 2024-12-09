@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for,jsonify
 from flask_sqlalchemy import SQLAlchemy
 import google.generativeai as genai
 
@@ -29,7 +29,7 @@ model = genai.GenerativeModel(
     safety_settings=safety_settings,
     generation_config=generation_config,
     system_instruction=(
-        f"{knowledge}You are integrated as which helps people cure depression. The user you are talking to is suffering from depression so please help me out"
+        f"You are integrated as a chatbot as which helps people cure depression. The user you are talking to is suffering from depression so please help him out"
     )
 )
 
@@ -131,7 +131,7 @@ def index():
             response.Q21, response.Q22, response.Q23, response.Q24, response.Q25,
             response.Q26, response.Q27, response.Q28, response.Q29, response.Q30
         ])
-        return redirect(url_for('result', score=total_score))
+        return redirect(url_for('result', response_id=response.id))
 
     return render_template("index.html")
 
